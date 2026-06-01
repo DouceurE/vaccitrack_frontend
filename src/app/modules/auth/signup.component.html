@@ -1,0 +1,229 @@
+<div class="signup-container">
+  
+  <!-- PANNEAU ASYMÉTRIQUE GAUCHE : Identité de la marque (Bleu VacciTrack #0084df) -->
+  <div class="brand-panel">
+    <div class="brand-header">
+      <div class="brand-logo-icon">💉</div>
+      <h1 class="brand-name">VACCITRACK</h1>
+    </div>
+    
+    <div class="brand-content">
+      <h2 class="brand-title">Création de votre Carnet de Santé Digital</h2>
+      <p class="brand-description">
+        Configurez votre profil, vos enfants, et gérez vos préférences de calendrier pour les alertes multipays.
+      </p>
+      
+      <!-- Liste des arguments clés du projet -->
+      <ul class="brand-features-list">
+        <li>
+          <span class="feature-icon">🗺️</span>
+          <span class="feature-text">Calendrier multipays personnalisé (Mali, Burkina, Sénégal)</span>
+        </li>
+        <li>
+          <span class="feature-icon">💬</span>
+          <span class="feature-text">Alertes multicanaux (SMS, WhatsApp) et messages vocaux en langues locales</span>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="brand-footer">
+      <p>© 2026 VacciTrack — Gestion vaccinale d'Afrique de l'Ouest.</p>
+    </div>
+  </div>
+
+  <!-- PANNEAU DROIT : Formulaire d'inscription dynamique par étapes -->
+  <div class="form-panel">
+    <div class="form-card">
+      
+      <div class="form-header">
+        <h2 class="form-title">Inscrivez-vous et Configurez</h2>
+        <p class="form-subtitle">Sélectionnez votre pays et remplissez les détails.</p>
+      </div>
+
+      <!-- BARRE DE PROGRESSION ÉPURÉE (Étapes 1 à 3 gérées par le TypeScript) -->
+      <div class="steps-progress-bar">
+        <div class="progress-line-track"></div>
+        
+        <div class="step-indicator-item" [class.step-active]="currentStep >= 1">
+          <div class="step-bubble">
+            <span *ngIf="currentStep <= 1">1</span>
+            <span *ngIf="currentStep > 1">✓</span>
+          </div>
+          <span class="step-label">Profil</span>
+        </div>
+        
+        <div class="step-indicator-item" [class.step-active]="currentStep >= 2">
+          <div class="step-bubble">
+            <span *ngIf="currentStep <= 2">2</span>
+            <span *ngIf="currentStep > 2">✓</span>
+          </div>
+          <span class="step-label">Lieu & Contact</span>
+        </div>
+        
+        <div class="step-indicator-item" [class.step-active]="currentStep === 3">
+          <div class="step-bubble">3</div>
+          <span class="step-label">Sécurité</span>
+        </div>
+      </div>
+
+      <!-- AFFICHAGE DES MESSAGES D'ERREUR OU DE SUCCÈS DE L'API REST -->
+      <div *ngIf="errorMessage" class="alert-message alert-danger">
+        ⚠️ {{ errorMessage }}
+      </div>
+      <div *ngIf="successMessage" class="alert-message alert-success">
+        🎉 {{ successMessage }}
+      </div>
+
+      <!-- FORMULAIRE PRINCIPAL ANGULAR -->
+      <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" *ngIf="!successMessage">
+        
+        <!-- ================= ÉTAPE 1 : PROFIL & IDENTITÉ ================= -->
+        <div class="form-step-content" *ngIf="currentStep === 1">
+          
+          <!-- Sélecteur Graphique de Rôle (Boutons radio masqués et stylisés) -->
+          <div class="form-group">
+            <label class="input-main-label">Sélecteur de Profil</label>
+            <div class="role-selector-container">
+              <label class="role-card-option" [class.role-selected]="signupForm.get('role')?.value === 'PARENT'">
+                <input type="radio" formControlName="role" value="PARENT">
+                <span class="role-title">Parent</span>
+              </label>
+              
+              <label class="role-card-option" [class.role-selected]="signupForm.get('role')?.value === 'MEDECIN'">
+                <input type="radio" formControlName="role" value="MEDECIN">
+                <span class="role-title">Médecin</span>
+              </label>
+            </div>
+            <p class="role-help-text" *ngIf="signupForm.get('role')?.value === 'PARENT'">
+              Enregistrement en tant que Parent (Pour Médecin, veuillez vous connecter via votre espace professionnel).
+            </p>
+          </div>
+
+          <!-- Saisie des Noms et Prénoms (Ligne partagée) -->
+          <div class="form-row-split">
+            <div class="form-group flex-1">
+              <label for="firstName" class="input-main-label">Prénom</label>
+              <input type="text" id="firstName" formControlName="firstName" class="form-control-input" placeholder="Ex: Jean">
+            </div>
+            <div class="form-group flex-1">
+              <label for="lastName" class="input-main-label">Nom</label>
+              <input type="text" id="lastName" formControlName="lastName" class="form-control-input" placeholder="Ex: Dupont">
+            </div>
+          </div>
+
+          <!-- Choix de la Langue de Notification (Pour l'accessibilité vocale/texte) -->
+          <div class="form-group">
+            <label for="languePreferee" class="input-main-label">Langues Locales (Pour les alertes vocales et textuelles)</label>
+            <select id="languePreferee" formControlName="languePreferee" class="form-control-select">
+              <option *ngFor="let langue of listeLangues" [value]="langue.code">
+                {{ langue.nom }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Bouton d'action Étape 1 -->
+          <div class="form-actions-container">
+            <button type="button" class="btn-action btn-next-primary" 
+                    [disabled]="signupForm.get('firstName')?.invalid || signupForm.get('lastName')?.invalid" 
+                    (click)="etapeSuivante()">
+              Suivant
+            </button>
+          </div>
+        </div>
+
+        <!-- ================= ÉTAPE 2 : LIEU & CONTACT ================= -->
+        <div class="form-step-content" *ngIf="currentStep === 2">
+          
+          <!-- Menu déroulant des pays cibles -->
+          <div class="form-group">
+            <label for="paysCode" class="input-main-label">Pays de résidence</label>
+            <select id="paysCode" formControlName="paysCode" class="form-control-select">
+              <option value="" disabled selected>Choisissez votre pays</option>
+              <option *ngFor="let pays of listePays" [value]="pays.code">
+                {{ pays.drapeau }} {{ pays.nom }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Message de confirmation d'activation du calendrier PEV national -->
+          <div class="info-banner-pev" *ngIf="signupForm.get('paysCode')?.value">
+            ℹ️ Calendrier vaccinal local appliqué automatiquement selon le pays détecté.
+          </div>
+
+          <!-- Saisie du numéro de téléphone avec indicatif automatique -->
+          <div class="form-group">
+            <label for="telephone" class="input-main-label">Numéro de téléphone (Alertes SMS/WhatsApp)</label>
+            <div class="phone-input-wrapper">
+              <span class="phone-prefix-badge" *ngIf="signupForm.get('paysCode')?.value">
+                {{ signupForm.get('paysCode')?.value === 'SEN' ? '+221' : signupForm.get('paysCode')?.value === 'BFA' ? '+226' : '+223' }}
+              </span>
+              <span class="phone-prefix-badge" *ngIf="!signupForm.get('paysCode')?.value">+---</span>
+              <input type="tel" id="telephone" formControlName="telephone" class="form-control-input field-phone" placeholder="Ex: 771234567">
+            </div>
+            <p class="input-help-error" *ngIf="signupForm.get('telephone')?.touched && signupForm.get('telephone')?.invalid">
+              Veuillez saisir un numéro de téléphone valide (entre 8 et 12 chiffres sans l'indicatif).
+            </p>
+          </div>
+
+          <!-- Boutons de navigation Étape 2 -->
+          <div class="form-actions-container split-actions">
+            <button type="button" class="btn-action btn-nav-secondary" (click)="etapePrecedente()">
+              Retour
+            </button>
+            <button type="button" class="btn-action btn-next-primary" 
+                    [disabled]="signupForm.get('paysCode')?.invalid || signupForm.get('telephone')?.invalid" 
+                    (click)="etapeSuivante()">
+              Suivant
+            </button>
+          </div>
+        </div>
+        <!-- ================= ÉTAPE 3 : SÉCURITÉ DE L'ACCÈS ================= -->
+        <div class="form-step-content" *ngIf="currentStep === 3">
+          
+          <!-- Identifiant unique e-mail -->
+          <div class="form-group">
+            <label for="email" class="input-main-label">Adresse E-mail</label>
+            <input type="email" id="email" formControlName="email" class="form-control-input" placeholder="Ex: parent@santeconnect.cc">
+            <p class="input-help-error" *ngIf="signupForm.get('email')?.touched && signupForm.get('email')?.invalid">
+              Veuillez fournir une adresse e-mail valide.
+            </p>
+          </div>
+
+          <!-- Saisie du mot de passe sécurisé JWT -->
+          <div class="form-group">
+            <label for="password" class="input-main-label">Mot de passe</label>
+            <input type="password" id="password" formControlName="password" class="form-control-input" placeholder="Minimum 8 caractères">
+          </div>
+
+          <!-- Confirmation de sécurité du mot de passe -->
+          <div class="form-group">
+            <label for="confirmPassword" class="input-main-label">Confirmer le mot de passe</label>
+            <input type="password" id="confirmPassword" formControlName="confirmPassword" class="form-control-input" placeholder="Ressaisir le mot de passe">
+            <p class="input-help-error" *ngIf="signupForm.hasError('notMatching') && signupForm.get('confirmPassword')?.touched">
+              ❌ Les deux mots de passe ne correspondent pas.
+            </p>
+          </div>
+
+          <!-- Boutons finaux de soumission API -->
+          <div class="form-actions-container split-actions">
+            <button type="button" class="btn-action btn-nav-secondary" [disabled]="isLoading" (click)="etapePrecedente()">
+              Retour
+            </button>
+            <button type="submit" class="btn-action btn-submit-success" [disabled]="signupForm.invalid || isLoading">
+              <span *ngIf="!isLoading">Créer mon compte</span>
+              <span *ngIf="isLoading">Traitement en cours...</span>
+            </button>
+          </div>
+        </div>
+
+      </form>
+
+      <!-- Lien vers la page de connexion existante -->
+      <div class="form-footer-redirect">
+        <p>Déjà inscrit ? <a href="/login" class="redirect-link">Se connecter</a></p>
+      </div>
+
+    </div>
+  </div>
+
+</div>

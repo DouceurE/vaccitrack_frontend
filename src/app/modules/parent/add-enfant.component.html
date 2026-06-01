@@ -1,0 +1,109 @@
+<div class="signup-container">
+  
+  <!-- PANNEAU ASYMÉTRIQUE GAUCHE -->
+  <div class="brand-panel">
+    <div class="brand-header">
+      <div class="brand-logo-icon">🛡️</div>
+      <h1 class="brand-name">VACCITRACK</h1>
+    </div>
+    
+    <div class="brand-content">
+      <h2 class="brand-title">Protection & Suivi Multipays</h2>
+      <p class="brand-description">
+        En enregistrant votre enfant, l'application calcule automatiquement son calendrier de vaccination personnalisé selon les directives nationales.
+      </p>
+      
+      <ul class="brand-features-list">
+        <li>
+          <span class="feature-icon">🇸🇳</span>
+          <span class="feature-text">Sénégal (Calendrier PEV officiel)</span>
+        </li>
+        <li>
+          <span class="feature-icon">🇧🇫</span>
+          <span class="feature-text">Burkina Faso (Calendrier PEV officiel)</span>
+        </li>
+        <li>
+          <span class="feature-icon">🇲🇱</span>
+          <span class="feature-text">Mali (Calendrier PEV officiel)</span>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="brand-footer">
+      <p>© 2026 VacciTrack — Protection de la santé infantile sous-régionale.</p>
+    </div>
+  </div>
+
+  <!-- PANNEAU DROIT : FORMULAIRE ASYMÉTRIQUE -->
+  <div class="form-panel">
+    <div class="form-card">
+      
+      <div class="form-header">
+        <h2 class="form-title">Enregistrer un Enfant</h2>
+        <p class="form-subtitle">Remplissez les informations pour générer son carnet vaccinal.</p>
+      </div>
+
+      <div *ngIf="errorMessage" class="alert-message alert-danger">
+        ⚠️ {{ errorMessage }}
+      </div>
+      <div *ngIf="successMessage" class="alert-message alert-success">
+        🎉 {{ successMessage }}
+      </div>
+
+      <form [formGroup]="enfantForm" (ngSubmit)="onSubmit()" *ngIf="!successMessage">
+        
+        <div class="form-group">
+          <label for="prenom" class="input-main-label">Prénom de l'enfant</label>
+          <input type="text" id="prenom" formControlName="prenom" class="form-control-input" placeholder="Ex: Amadou">
+        </div>
+
+        <div class="form-group">
+          <label for="nom" class="input-main-label">Nom de famille</label>
+          <input type="text" id="nom" formControlName="nom" class="form-control-input" placeholder="Ex: Diallo">
+        </div>
+
+        <div class="form-group">
+          <label for="date_naissance" class="input-main-label">Date de naissance</label>
+          <input type="date" id="date_naissance" formControlName="date_naissance" class="form-control-input">
+          <p class="input-help-error" *ngIf="enfantForm.get('date_naissance')?.errors?.['dateFuture']">
+            La date de naissance ne peut pas être dans le futur.
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label for="pays_residence_code" class="input-main-label">Pays de résidence</label>
+          <select id="pays_residence_code" formControlName="pays_residence_code" class="form-control-select">
+            <option value="" disabled selected>Choisissez le pays d'application</option>
+            <option *ngFor="let pays of listePays" [value]="pays.id">
+              {{ pays.flag }} {{ pays.nom }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="input-main-label">Genre de l'enfant</label>
+          <div class="role-selector-container">
+            <label class="role-card-option" [class.role-selected]="enfantForm.get('genre')?.value === 'M'">
+              <input type="radio" formControlName="genre" value="M">
+              <span class="role-title">Masculin</span>
+            </label>
+            <label class="role-card-option" [class.role-selected]="enfantForm.get('genre')?.value === 'F'">
+              <input type="radio" formControlName="genre" value="F">
+              <span class="role-title">Féminin</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-actions-container split-actions">
+          <button type="button" class="btn-action btn-nav-secondary" (click)="retournerDashboard()">Annuler</button>
+          <button type="submit" class="btn-action btn-next-primary" [disabled]="enfantForm.invalid || isLoading">
+            <span *ngIf="!isLoading">Activer le Suivi</span>
+            <span *ngIf="isLoading">Enregistrement...</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+</div>

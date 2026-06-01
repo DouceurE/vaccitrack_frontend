@@ -1,0 +1,19 @@
+@use '../auth/signup.component.scss';
+
+// Ajustements spécifiques pour le formulaire d'ajout d'enfant
+.split-actions {
+  justify-content: space-between;
+  gap: 1rem;
+}
+.btn-nav-secondary {
+  background-color: #ffffff;
+  color: #64748b;
+  border: 1px solid #cbd5e1;
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  &:hover {
+    background-color: #f1f5f9;
+  }
+}

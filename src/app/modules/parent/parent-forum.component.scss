@@ -1,0 +1,215 @@
+// VARIABLES DE COULEURS OFFICIELLES VACCITRACK
+$color-brand: #0084df;
+$color-brand-hover: #0073c4;
+$color-bg-panel: #f8fafc;
+$color-text-dark: #1e293b;
+$color-text-light: #f1f5f9;
+$color-text-muted: #64748b;
+$color-border: #cbd5e1;
+$color-success: #10b981;
+$color-danger: #ef4444;
+
+.forum-global-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: $color-bg-panel;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+// EN-TÊTE DU FORUM VACCITRACK
+.forum-header {
+  background-color: #ffffff;
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid $color-border;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+
+  .header-content {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    
+    h1 { 
+      font-size: 1.35rem; 
+      color: $color-text-dark; 
+      margin: 0.5rem 0 0.25rem 0; 
+      font-weight: 700; 
+    }
+    
+    p { 
+      font-size: 0.85rem; 
+      color: $color-text-muted; 
+      margin: 0; 
+    }
+  }
+
+  // BOUTON DE RETOUR AU DASHBOARD PARENT
+  .btn-back {
+    background: transparent;
+    border: 1px solid $color-border;
+    color: $color-text-dark;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    
+    &:hover { 
+      background: $color-text-light;
+      border-color: $color-text-muted;
+    }
+  }
+}
+
+// PANNEAU DES DISCUSSIONS
+.forum-messages-zone {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  
+  .messages-list {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+}
+
+// CARTE DES BULLES DE CHAT (PARENTS / MÉDECINS)
+.message-card {
+  background-color: #ffffff;
+  padding: 1.25rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid $color-text-muted;
+  max-width: 80%;
+  align-self: flex-start;
+  transition: transform 0.2s ease;
+
+  // S'applique si le message provient d'un professionnel de santé
+  &.is-doctor {
+    border-left-color: $color-brand; // Rappel de la couleur officielle VacciTrack
+    background-color: rgba(0, 132, 223, 0.04); // Légère teinte bleutée VacciTrack
+    align-self: flex-end; 
+  }
+
+  .message-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+
+    .author-name { 
+      font-weight: 700; 
+      color: $color-text-dark; 
+    }
+    
+    .author-badge {
+      background-color: $color-text-light;
+      color: $color-text-dark;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.75rem;
+      
+      &.badge-doc { 
+        background-color: rgba(0, 132, 223, 0.12); 
+        color: $color-brand-hover; 
+      }
+    }
+    
+    .message-date { 
+      color: $color-text-muted; 
+    }
+  }
+
+  .message-body p { 
+    margin: 0; 
+    font-size: 0.95rem; 
+    line-height: 1.5; 
+    color: $color-text-dark; 
+  }
+}
+
+// BANNÈRE D'ALERTE ERREUR
+.forum-alert {
+  padding: 0.85rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto 1.5rem auto;
+
+  &.alert-danger { 
+    background-color: rgba(239, 68, 68, 0.08); 
+    color: $color-danger; 
+    border: 1px solid rgba(239, 68, 68, 0.2); 
+  }
+}
+
+// FOOTER : SAISIE DU MESSAGE EN DIRECT
+.forum-input-footer {
+  background-color: #ffffff;
+  padding: 1.25rem 2rem;
+  border-top: 1px solid $color-border;
+
+  .message-form {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    gap: 1rem;
+  }
+
+  .form-input-text {
+    flex: 1;
+    height: 46px;
+    padding: 0 1.25rem;
+    border: 1px solid $color-border;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: $color-text-dark;
+    background-color: $color-bg-panel;
+    transition: all 0.2s ease;
+    
+    &:focus { 
+      outline: none; 
+      border-color: $color-brand; 
+      background: #ffffff; 
+      box-shadow: 0 0 0 3px rgba(0, 132, 223, 0.1);
+    }
+  }
+
+  // BOUTON CLIQUABLE ENVOYER AUX COULEURS DE L'APPLI
+  .btn-send-message {
+    height: 46px;
+    padding: 0 1.5rem;
+    background-color: $color-brand; // Bleu officiel
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    
+    &:hover:not(:disabled) { 
+      background-color: $color-brand-hover; 
+    }
+    
+    &:disabled { 
+      background-color: $color-text-muted; 
+      cursor: not-allowed; 
+      opacity: 0.6;
+    }
+  }
+}
+
+.forum-state-info { 
+  text-align: center; 
+  color: $color-text-muted; 
+  font-weight: 500; 
+  padding-top: 3rem; 
+}

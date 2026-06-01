@@ -1,0 +1,64 @@
+<div class="edit-enfant-container">
+  <div class="form-card">
+    <div class="form-header">
+      <h2>✏️ Modifier le Profil de l'Enfant</h2>
+      <p>Mettez à jour les informations pour ajuster le calendrier vaccinal PEV sous-régional.</p>
+    </div>
+
+    <!-- Message de chargement initial -->
+    <div *ngIf="isLoading" class="loading-state">
+      Chargement des informations de l'enfant...
+    </div>
+
+    <!-- Formulaire d'édition -->
+    <form *ngIf="!isLoading" (submit)="enregistrerModifications($event)">
+      
+      <!-- Bannière d'erreur -->
+      <div *ngIf="errorMessage" class="alert alert-danger">⚠️ {{ errorMessage }}</div>
+      
+      <!-- Bannière de succès -->
+      <div *ngIf="successMessage" class="alert alert-success">🎉 {{ successMessage }}</div>
+
+      <div class="form-group">
+        <label for="prenom">Prénom de l'enfant</label>
+        <input type="text" id="prenom" name="prenom" [(ngModel)]="enfant.prenom" required class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="nom">Nom de famille</label>
+        <input type="text" id="nom" name="nom" [(ngModel)]="enfant.nom" required class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="date_naissance">Date de naissance</label>
+        <input type="date" id="date_naissance" name="date_naissance" [(ngModel)]="enfant.date_naissance" required class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="genre">Genre</label>
+        <select id="genre" name="genre" [(ngModel)]="enfant.genre" required class="form-control">
+          <option value="M">Masculin</option>
+          <option value="F">Féminin</option>
+        </select>
+      </div>
+
+            <div class="form-group">
+        <label for="pays">Pays de résidence (Réglementation PEV)</label>
+        <select id="pays" name="pays" [(ngModel)]="enfant.pays_residence" required class="form-control">
+          @for (pays of listePays; track pays.id) {
+            <option [value]="pays.id">{{ pays.nom }}</option>
+          }
+        </select>
+      </div>
+
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="annuler()">Annuler</button>
+        <button type="submit" class="btn-submit" [disabled]="isSaving">
+          {{ isSaving ? 'Enregistrement...' : 'Sauvegarder les modifications' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

@@ -1,0 +1,133 @@
+<div class="dashboard-global-container">
+  
+  <!-- BARRE LATÉRALE GAUCHE (Conserve vos fonctionnalités existantes) -->
+  <aside class="dashboard-sidebar">
+    <div class="sidebar-brand-area">
+      <h2>🛡️ VacciTrack</h2>
+    </div>
+    <div class="sidebar-navigation-menu">
+      <p class="menu-section-title">Mes Enfants</p>
+      @if (listeEnfants.length > 0) {
+        <ul class="children-profile-list">
+          @for (enfant of listeEnfants; track enfant.id) {
+            <li class="child-item" [class.child-item-active]="enfant.id === enfantSelectionne?.id" (click)="selectionnerEnfant(enfant)">
+              <span class="child-full-name">{{ enfant.nom_complet }}</span>
+              <span class="child-location-tag">📍 {{ enfant.pays_residence_nom }}</span>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="sidebar-empty-state-text">Aucun enfant enregistré</p>
+      }
+      <button type="button" class="btn-add" (click)="naviguerVersAjoutEnfant()">➕ Ajouter un enfant</button>
+    </div>
+    <div class="sidebar-footer-area">
+      <button type="button" class="btn-logout" (click)="deconnecterEspace()">🚪 Déconnexion</button>
+    </div>
+  </aside>
+
+  <!-- PANNEAU CENTRAL PRINCIPAL (Nouveau design style Carnet de Santé) -->
+  <main class="dashboard-main-content">
+    @if (isLoading) { <p class="loading-text">Chargement des données vaccinales...</p> }
+    @if (errorMessage && !isLoading) { <div class="alert-banner">⚠️ {{ errorMessage }}</div> }
+
+    @if (!isLoading && listeEnfants.length > 0 && enfantSelectionne) {
+      <div class="active-dashboard-layout">
+        
+               <!-- BANDEAU SUPÉRIEUR : IDENTITÉ DE L'ENFANT -->
+        <header class="child-profile-hero-card">
+          <div class="hero-avatar">👶</div>
+          <div class="hero-meta">
+            <h2>Mon Enfant : {{ enfantSelectionne.nom_complet }}</h2>
+            <p><strong>Né le :</strong> {{ enfantSelectionne.date_naissance }}</p>
+            <p><strong>Résidence :</strong> {{ enfantSelectionne.pays_residence_nom }} 🌍 (PEV Officiel)</p>
+          </div>
+          
+          <!-- 🎙️ MINI-MODULE AUDIO D'INCLUSION ANALPHABÈTE AJOUTÉ -->
+          <div class="vocal-inclusion-area" style="margin-left: auto; padding-right: 1.5rem;">
+            <button type="button" class="btn-add vocal-cta" (click)="declencherSyntheseVocale()" style="background-color: #10b981; border: none; padding: 10px 16px; font-size: 0.9rem; font-weight: 700; border-radius: 8px; color: white; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+              📢 ÉCOUTER EN DIRECT (Vocal)
+            </button>
+          </div>
+
+          <div class="hero-crud-actions" style="position: static;"> <!-- Modification temporaire pour l'alignement -->
+            <button type="button" class="btn-action-edit" (click)="modifierEnfant(enfantSelectionne.id)">✏️ Modifier</button>
+            <button type="button" class="btn-action-delete" (click)="supprimerEnfant(enfantSelectionne.id)">🗑️ Supprimer</button>
+          </div>
+        </header>
+
+
+        <!-- GRILLE DE COMPOSANTS (WIDGETS) -->
+        <div class="widgets-medical-grid">
+          
+          <!-- COLONNE GAUCHE : PASSEPORT & ALERTES -->
+          <div class="left-widgets-column">
+            
+            <!-- CARTE QR CODE ET TELECHARGEMENT -->
+            <div class="medical-widget-card qr-card-layout">
+              <div class="qr-header-flex">
+                <div class="passport-icon-box">📘 Carnet de Santé Numérique</div>
+                <div class="qr-frame">
+                  <img [src]="'https://qrserver.com' + enfantSelectionne.qr_code_token" alt="QR Code Unique">
+                </div>
+              </div>
+              <p class="qr-instructions"><strong>QR CODE UNIQUE</strong><br>À partager avec le médecin lors de la consultation.</p>
+              <button type="button" class="btn-download-pdf" (click)="telechargerPDF()">TÉLÉCHARGER CARNET (PDF)</button>
+            </div>
+
+            <!-- CARTE RAPPELEUR ALERTE J-1 -->
+            <div class="medical-widget-card alert-urgency-card">
+              <h4>⚠️ ALERTE PROCHAIN VACCIN</h4>
+              <p class="alert-text">
+                <strong>Rappel :</strong> Votre enfant a un vaccin planifié prochainement. 
+                Les notifications de rappels automatiques SMS/WhatsApp sont actives sur votre numéro.
+              </p>
+            </div>
+          </div>
+
+          <!-- COLONNE CENTRAL-DROITE : LA TIMELINE PEV VISUELLE -->
+          <div class="medical-widget-card timeline-widget-layout">
+            <h4>📅 Programme Élargi de Vaccination (PEV)</h4>
+            
+            <div class="clinical-timeline">
+              @if (carnetVaccination.length > 0) {
+                @for (ligne of carnetVaccination; track ligne.id) {
+                  <div class="timeline-step" [class.step-administered]="ligne.statut === 'ADMINISTRE'" [class.step-pending]="ligne.statut === 'A_VENIR'" [class.step-delayed]="ligne.statut === 'EN_RETARD'">
+                    <div class="timeline-bullet"></div>
+                    <div class="step-details">
+                      <span class="vaccin-code-label">{{ ligne.vaccin_code }}</span>
+                      <span class="vaccin-disease-text">{{ ligne.nom_maladie_cible }}</span>
+                      <div class="step-status-tag">
+                        @if (ligne.statut === 'ADMINISTRE') {
+                          <span class="status-success-txt">✔️ Administré le {{ ligne.date_prevue }}</span>
+                        } @else if (ligne.statut === 'EN_RETARD') {
+                          <span class="status-danger-txt">❌ En retard (Échéance : {{ ligne.date_prevue }})</span>
+                        } @else {
+                          <span class="status-pending-txt">⏳ À venir le {{ ligne.date_prevue }}</span>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                }
+              } @else {
+                <p class="empty-state-txt">Aucun vaccin planifié.</p>
+              }
+            </div>
+          </div>
+
+          <!-- COLONNE DROITE : FORUM COMMUNAUTAIRE -->
+          <div class="medical-widget-card forum-widget-layout">
+            <h4>💬 FORUM PARENTS & MÉDECINS</h4>
+            <div class="forum-preview-bubble" (click)="ouvrirDiscussionForum('general')">
+              <strong>Dr. Ndoye (Pédiatre) :</strong>
+              <p>Conseils pour la fièvre post-vaccination : Donnez du Paracétamol et hydratez bien l'enfant...</p>
+            </div>
+            <button type="button" class="btn-forum-cta" (click)="naviguerVersForum()">ACCÉDER AU FORUM (Modéré)</button>
+          </div>
+
+        </div>
+
+      </div>
+    }
+  </main>
+</div>

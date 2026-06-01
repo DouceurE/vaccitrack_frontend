@@ -1,0 +1,66 @@
+<div class="forum-global-container">
+  
+  <!-- En-tête de navigation du Forum -->
+  <header class="forum-header">
+    <div class="header-content">
+      <button type="button" class="btn-back" (click)="retournerAuDashboard()">⬅️ Retour Dashboard</button>
+      <h1>💬 Espace d'Entraide Parents & Médecins</h1>
+      <p>Posez vos questions aux professionnels de santé agréés (Sénégal, Burkina, Mali).</p>
+    </div>
+  </header>
+
+  <!-- Panneau des messages -->
+  <main class="forum-messages-zone">
+    
+    @if (isLoading) {
+      <div class="forum-state-info">Chargement de la discussion communautaire...</div>
+    }
+
+    @if (errorMessage) {
+      <div class="forum-alert alert-danger">⚠️ {{ errorMessage }}</div>
+    }
+
+    @if (!isLoading && listeMessages.length === 0) {
+      <div class="forum-state-info">Aucun message publié. Soyez le premier à poser une question !</div>
+    }
+
+    <!-- Liste dynamique des messages -->
+    @if (!isLoading && listeMessages.length > 0) {
+      <div class="messages-list">
+        @for (msg of listeMessages; track msg.id) {
+          <div class="message-card" [class.is-doctor]="msg.auteur_role === 'MEDECIN'">
+            <div class="message-meta">
+              <span class="author-name">
+                {{ msg.auteur_role === 'MEDECIN' ? '🩺 ' : '👤 ' }} {{ msg.auteur_nom }}
+              </span>
+              <span class="author-badge" [class.badge-doc]="msg.auteur_role === 'MEDECIN'">
+                {{ msg.auteur_role === 'MEDECIN' ? 'Médecin' : 'Parent' }}
+              </span>
+              <span class="message-date">{{ msg.date }}</span>
+            </div>
+            <div class="message-body">
+              <p>{{ msg.contenu }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </main>
+
+  <!-- Zone de saisie d'un nouveau message (Footer) -->
+  <footer class="forum-input-footer">
+    <form (submit)="envoyerMessage($event)" class="message-form">
+      <input type="text" 
+             [value]="nouveauMessage" 
+             (input)="onMessageInput($event)"
+             placeholder="Écrivez votre question ou réponse ici..." 
+             maxlength="1000" 
+             class="form-input-text"
+             [disabled]="isSending">
+      <button type="submit" class="btn-send-message" [disabled]="!nouveauMessage.trim() || isSending">
+        {{ isSending ? 'Envoi...' : 'Envoyer 🚀' }}
+      </button>
+    </form>
+  </footer>
+
+</div>

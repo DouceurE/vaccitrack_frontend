@@ -1,0 +1,100 @@
+<div class="signup-container">
+  
+  <!-- PANNEAU ASYMÉTRIQUE GAUCHE : Miroir parfait de l'inscription VacciTrack -->
+  <div class="brand-panel">
+    <div class="brand-header">
+      <div class="brand-logo-icon">💉</div>
+      <h1 class="brand-name">VACCITRACK</h1>
+    </div>
+    
+    <div class="brand-content">
+      <h2 class="brand-title">Accédez à votre Carnet de Santé Digital</h2>
+      <p class="brand-description">
+        Suivez et planifiez en temps réel le calendrier vaccinal officiel de vos enfants (Sénégal, Burkina, Mali).
+      </p>
+      
+      <ul class="brand-features-list">
+        <li>
+          <span class="feature-icon">🛡️</span>
+          <span class="feature-text">Données médicales confidentielles et sécurisées</span>
+        </li>
+        <li>
+          <span class="feature-icon">📲</span>
+          <span class="feature-text">Support du mode hors-ligne pour les professionnels de santé</span>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="brand-footer">
+      <p>© 2026 VacciTrack — Gestion vaccinale d'Afrique de l'Ouest.</p>
+    </div>
+  </div>
+
+  <!-- PANNEAU DROIT : Formulaire de connexion réactif -->
+  <div class="form-panel">
+    <div class="form-card">
+      
+      <div class="form-header">
+        <h2 class="form-title">Connexion à votre Espace</h2>
+        <p class="form-subtitle">Saisissez vos identifiants pour accéder au suivi.</p>
+      </div>
+
+      <!-- Zone d'affichage dynamique des erreurs de connexion (401, Réseau) -->
+      <div *ngIf="errorMessage" class="alert-message alert-danger">
+        ⚠️ {{ errorMessage }}
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        
+        <!-- Sélecteur graphique de profil (Boutons radio encapsulés) -->
+        <div class="form-group">
+          <label class="input-main-label">Choisissez votre profil</label>
+          <div class="role-selector-container">
+            <label class="role-card-option" [class.role-selected]="loginForm.get('role')?.value === 'PARENT'">
+              <input type="radio" formControlName="role" value="PARENT">
+              <span class="role-title">👥 Parent</span>
+            </label>
+            
+            <label class="role-card-option" [class.role-selected]="loginForm.get('role')?.value === 'MEDECIN'">
+              <input type="radio" formControlName="role" value="MEDECIN">
+              <span class="role-title">🩺 Médecin</span>
+            </label>
+          </div>
+        </div>
+        <!-- Saisie de l'adresse E-mail unique -->
+        <div class="form-group">
+          <label for="email" class="input-main-label">Adresse E-mail</label>
+          <input type="email" id="email" formControlName="email" class="form-control-input" placeholder="Ex: parent@santeconnect.cc">
+          <p class="input-help-error" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+            Veuillez saisir une adresse e-mail valide.
+          </p>
+        </div>
+
+        <!-- Saisie du mot de passe sécurisé -->
+        <div class="form-group">
+          <label for="password" class="input-main-label">Mot de passe</label>
+          <input type="password" id="password" formControlName="password" class="form-control-input" placeholder="Saisissez votre mot de passe">
+          <p class="input-help-error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+            Le mot de passe doit contenir au moins 8 caractères.
+          </p>
+        </div>
+
+        <!-- Bouton d'action principal de connexion -->
+        <div class="form-actions-container">
+          <button type="submit" class="btn-action btn-next-primary" [disabled]="loginForm.invalid || isLoading">
+            <span *ngIf="!isLoading">Se connecter</span>
+            <span *ngIf="isLoading">Connexion en cours...</span>
+          </button>
+        </div>
+
+      </form>
+
+      <!-- Lien de redirection vers la page d'inscription VacciTrack -->
+      <div class="form-footer-redirect">
+        <p>Pas encore de compte ? <a href="/signup" class="redirect-link">Créer un compte</a></p>
+      </div>
+
+    </div>
+  </div>
+
+</div>

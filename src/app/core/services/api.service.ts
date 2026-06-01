@@ -1,38 +1,51 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://127.0.0';
+  // 🟢 Remplacement de localhost par votre URL Render officielle (sans oublier le suffixe de l'API)
+  private readonly baseUrl = 'https://vaccitrack-backend-4.onrender.com/api/v1/vaccinations/doctor';
 
   constructor(private http: HttpClient) { }
 
+  /**
+   * Récupère le token d'authentification pour sécuriser les requêtes vers Render
+   */
+  private obtenirHeadersSecurises(): { headers: HttpHeaders } {
+    const token = localStorage.getItem('access_token');
+    return {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    };
+  }
+
   getDoctorStats(): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/stats/`);
+    return this.http.get<any>(`${this.baseUrl}/stats/`, this.obtenirHeadersSecurises());
   }
 
   getEnfantParToken(token: string): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/recherche/${token}/`);
+    return this.http.get<any>(`${this.baseUrl}/recherche/${token}/`, this.obtenirHeadersSecurises());
   }
 
   postCertifierInjection(ligneId: string): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/certifier/${ligneId}/`, {});
-  }
-    /**
-   * Récupère l'état des stocks de vaccins (BCG, Penta...)
-   */
-  getStocksVaccins(): Observable<any[]> {
-    return this.http.get<any[]>(`http://localhost:8000/api/v1/vaccinations/doctor/stocks/`);
+    return this.http.post<any>(`${this.baseUrl}/certifier/${ligneId}/`, {}, this.obtenirHeadersSecurises());
   }
 
   /**
-   * Récupère l'historique des relevés de température de la chaîne du froid
+   * Récupère l'état des stocks de vaccins (BCG, Penta...) depuis Render
    */
-  getChaineFroid(): Observable<any[]> {
-    return this.http.get<any[]>(`http://localhost:8000/api/v1/vaccinations/doctor/chaine-froid/`);
+  getStocksVaccins(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/stocks/`, this.obtenirHeadersSecurises());
   }
 
+  /**
+   * Récupère l'historique de la chaîne du froid depuis Render
+   */
+  getChaineFroid(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/chaine-froid/`, this.obtenirHeadersSecurises());
+  }
 }

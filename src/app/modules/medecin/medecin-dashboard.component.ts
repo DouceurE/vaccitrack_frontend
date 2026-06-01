@@ -286,7 +286,7 @@ export class MedecinDashboardComponent implements OnInit {
   public errorMessage: string = '';
   public successMessage: string = '';
 
-  private readonly API_BASE_URL = 'http://localhost:8000/api/v1/vaccinations/doctor/';
+  private readonly API_BASE_URL = 'https://vaccitrack-backend-4.onrender.com/api/v1/vaccinations/doctor/';
   // 🟢 NOUVELLES VARIABLES AJOUTÉES POUR LES MODULES PRO
   public listeStocks: any[] = [];
   public listeTemperatures: any[] = [];

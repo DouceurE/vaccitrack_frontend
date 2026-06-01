@@ -33,7 +33,7 @@ export class SignupComponent implements OnInit {
     { code: 'MO', nom: 'Mooré' }
   ];
 
-  private readonly API_URL = 'http://localhost:8000/api/v1/authentications/register/';
+  private readonly API_URL = 'https://vaccitrack-backend-4.onrender.com/api/v1/authentications/register/';
 
   constructor(
     private fb: FormBuilder,

@@ -67,19 +67,220 @@ export interface MessageForum {
       </footer>
     </div>
   `,
-  styles: [`
-    $color-brand: #0084df; $color-brand-hover: #0073c4; $color-bg-panel: #f8fafc; $color-text-dark: #1e293b; $color-text-light: #f1f5f9; $color-text-muted: #64748b; $color-border: #cbd5e1; $color-danger: #ef4444;
-    .forum-global-container { display: flex; flex-direction: column; height: 100vh; background-color: $color-bg-panel; font-family: system-ui, sans-serif; }
-    .forum-header { background-color: #ffffff; padding: 1.25rem 2rem 0 2rem; border-bottom: 1px solid $color-border; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02); }
-    .header-content { max-width: 900px; margin: 0 auto 1rem auto; h1 { font-size: 1.35rem; color: $color-text-dark; margin: 0.5rem 0 0.25rem 0; font-weight: 700; } p { font-size: 0.85rem; color: $color-text-muted; margin: 0; } }
-    .btn-back { background: transparent; border: 1px solid $color-border; color: $color-text-dark; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; &:hover { background: $color-text-light; } }
-    .forum-tabs-nav { max-width: 900px; margin: 0 auto; display: flex; gap: 1rem; }
-    .tab-btn { background: transparent; border: none; border-bottom: 3px solid transparent; padding: 0.75rem 1rem; font-size: 0.9rem; font-weight: 600; color: $color-text-muted; cursor: pointer; transition: all 0.2s; &:hover { color: $color-brand; } &.tab-active { color: $color-brand; border-bottom-color: $color-brand; } }
-    .forum-messages-zone { flex: 1; padding: 2rem; overflow-y: auto; .messages-list { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.25rem; } }
-    .message-card { background-color: #ffffff; padding: 1.25rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border-left: 4px solid $color-text-muted; max-width: 80%; align-self: flex-start; &.is-doctor { border-left-color: $color-brand; background-color: rgba(0, 132, 223, 0.04); align-self: flex-end; } .message-meta { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; font-size: 0.8rem; .author-name { font-weight: 700; color: $color-text-dark; } .author-badge { background-color: $color-text-light; color: $color-text-dark; padding: 2px 6px; border-radius: 4px; font-weight: 600; &.badge-doc { background-color: rgba(0, 132, 223, 0.12); color: $color-brand-hover; } } .message-date { color: $color-text-muted; } } .message-body p { margin: 0; font-size: 0.95rem; line-height: 1.5; color: $color-text-dark; } }
-    .forum-input-footer { background-color: #ffffff; padding: 1.25rem 2rem; border-top: 1px solid $color-border; .message-form { max-width: 900px; margin: 0 auto; display: flex; gap: 1rem; } .form-input-text { flex: 1; height: 46px; padding: 0 1.25rem; border: 1px solid $color-border; border-radius: 8px; font-size: 0.95rem; color: $color-text-dark; background-color: $color-bg-panel; &:focus { outline: none; border-color: $color-brand; background: #fff; box-shadow: 0 0 0 3px rgba(0, 132, 223, 0.1); } } .btn-send-message { height: 46px; padding: 0 1.5rem; background-color: $color-brand; color: #ffffff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; &:hover:not(:disabled) { background-color: $color-brand-hover; } &:disabled { background-color: $color-text-muted; cursor: not-allowed; opacity: 0.6; } } }
-    .forum-state-info { text-align: center; color: $color-text-muted; font-weight: 500; padding-top: 3rem; }
-    .forum-alert.alert-danger { padding: 0.85rem 1rem; border-radius: 6px; font-size: 0.9rem; color: $color-danger; background-color: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); max-width: 900px; margin: 0 auto 1.5rem auto; }
+
+    styles: [`
+    .forum-global-container { 
+      display: flex; 
+      flex-direction: column; 
+      height: 100vh; 
+      background-color: #f8fafc; 
+      font-family: system-ui, sans-serif; 
+    }
+    
+    .forum-header { 
+      background-color: #ffffff; 
+      padding: 1.25rem 2rem 0 2rem; 
+      border-bottom: 1px solid #cbd5e1; 
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02); 
+    }
+    
+    .header-content { 
+      max-width: 900px; 
+      margin: 0 auto 1rem auto; 
+    }
+    
+    .header-content h1 { 
+      font-size: 1.35rem; 
+      color: #1e293b; 
+      margin: 0.5rem 0 0.25rem 0; 
+      font-weight: 700; 
+    }
+    
+    .header-content p { 
+      font-size: 0.85rem; 
+      color: #64748b; 
+      margin: 0; 
+    }
+    
+    .btn-back { 
+      background: transparent; 
+      border: 1px solid #cbd5e1; 
+      color: #1e293b; 
+      padding: 6px 12px; 
+      border-radius: 6px; 
+      cursor: pointer; 
+      font-weight: 600; 
+    }
+    
+    .btn-back:hover { 
+      background: #f1f5f9; 
+    }
+    
+    .forum-tabs-nav { 
+      max-width: 900px; 
+      margin: 0 auto; 
+      display: flex; 
+      gap: 1rem; 
+    }
+    
+    .tab-btn { 
+      background: transparent; 
+      border: none; 
+      border-bottom: 3px solid transparent; 
+      padding: 0.75rem 1rem; 
+      font-size: 0.9rem; 
+      font-weight: 600; 
+      color: #64748b; 
+      cursor: pointer; 
+      transition: all 0.2s; 
+    }
+    
+    .tab-btn:hover { 
+      color: #0084df; 
+    }
+    
+    .tab-btn.tab-active { 
+      color: #0084df; 
+      border-bottom-color: #0084df; 
+    }
+    
+    .forum-messages-zone { 
+      flex: 1; 
+      padding: 2rem; 
+      overflow-y: auto; 
+    }
+    
+    .forum-messages-zone .messages-list { 
+      max-width: 900px; 
+      margin: 0 auto; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 1.25rem; 
+    }
+    
+    .message-card { 
+      background-color: #ffffff; 
+      padding: 1.25rem; 
+      border-radius: 12px; 
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); 
+      border-left: 4px solid #64748b; 
+      max-width: 80%; 
+      align-self: flex-start; 
+    }
+    
+    .message-card.is-doctor { 
+      border-left-color: #0084df; 
+      background-color: rgba(0, 132, 223, 0.04); 
+      align-self: flex-end; 
+    }
+    
+    .message-card .message-meta { 
+      display: flex; 
+      align-items: center; 
+      gap: 0.75rem; 
+      margin-bottom: 0.5rem; 
+      font-size: 0.8rem; 
+    }
+    
+    .message-card .message-meta .author-name { 
+      font-weight: 700; 
+      color: #1e293b; 
+    }
+    
+    .message-card .message-meta .author-badge { 
+      background-color: #f1f5f9; 
+      color: #1e293b; 
+      padding: 2px 6px; 
+      border-radius: 4px; 
+      font-weight: 600; 
+    }
+    
+    .message-card .message-meta .author-badge.badge-doc { 
+      background-color: rgba(0, 132, 223, 0.12); 
+      color: #0073c4; 
+    }
+    
+    .message-card .message-meta .message-date { 
+      color: #64748b; 
+    }
+    
+    .message-card .message-body p { 
+      margin: 0; 
+      font-size: 0.95rem; 
+      line-height: 1.5; 
+      color: #1e293b; 
+    }
+    
+    .forum-input-footer { 
+      background-color: #ffffff; 
+      padding: 1.25rem 2rem; 
+      border-top: 1px solid #cbd5e1; 
+    }
+    
+    .forum-input-footer .message-form { 
+      max-width: 900px; 
+      margin: 0 auto; 
+      display: flex; 
+      gap: 1rem; 
+    }
+    
+    .forum-input-footer .form-input-text { 
+      flex: 1; 
+      height: 46px; 
+      padding: 0 1.25rem; 
+      border: 1px solid #cbd5e1; 
+      border-radius: 8px; 
+      font-size: 0.95rem; 
+      color: #1e293b; 
+      background-color: #f8fafc; 
+    }
+    
+    .forum-input-footer .form-input-text:focus { 
+      outline: none; 
+      border-color: #0084df; 
+      background: #fff; 
+      box-shadow: 0 0 0 3px rgba(0, 132, 223, 0.1); 
+    }
+    
+    .forum-input-footer .btn-send-message { 
+      height: 46px; 
+      padding: 0 1.5rem; 
+      background-color: #0084df; 
+      color: #ffffff; 
+      border: none; 
+      border-radius: 8px; 
+      font-weight: 600; 
+      cursor: pointer; 
+      transition: background 0.2s; 
+    }
+    
+    .forum-input-footer .btn-send-message:hover:not(:disabled) { 
+      background-color: #0073c4; 
+    }
+    
+    .forum-input-footer .btn-send-message:disabled { 
+      background-color: #64748b; 
+      cursor: not-allowed; 
+      opacity: 0.6; 
+    }
+    
+    .forum-state-info { 
+      text-align: center; 
+      color: #64748b; 
+      font-weight: 500; 
+      padding-top: 3rem; 
+    }
+    
+    .forum-alert.alert-danger { 
+      padding: 0.85rem 1rem; 
+      border-radius: 6px; 
+      font-size: 0.9rem; 
+      color: #ef4444; 
+      background-color: rgba(239, 68, 68, 0.08); 
+      border: 1px solid rgba(239, 68, 68, 0.2); 
+      max-width: 900px; 
+      margin: 0 auto 1.5rem auto; 
+    }
   `]
 })
 export class MedecinForumComponent implements OnInit {
@@ -90,7 +291,7 @@ export class MedecinForumComponent implements OnInit {
   public isSending: boolean = false;
   public errorMessage: string | null = null;
 
-  private readonly API_FORUM_URL = 'http://localhost:8000/api/v1/core/forum/messages/';
+  private readonly API_FORUM_URL = 'https://vaccitrack-backend-4.onrender.com/api/v1/core/forum/messages/';
 
   constructor(
     private http: HttpClient,

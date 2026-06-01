@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit {
     this.isLoading = true;
     console.log("🚀 Envoi de la requête réseau vers Django...");
 
-    this.http.post<any>('http://localhost:8000/api/v1/authentications/login/', this.loginForm.value).subscribe({
+    this.http.post<any>('https://vaccitrack-backend-4.onrender.com/api/v1/authentications/login/', this.loginForm.value).subscribe({
       next: (response: any) => {
         this.isLoading = false;
         console.log("✅ Authentification réussie ! Réponse Django :", response);
@@ -117,7 +117,6 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/login']);
     }
   }
-
 
   /**
    * Intercepte explicitement les codes de retour de l'API pour informer l'utilisateur.

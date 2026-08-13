@@ -23,9 +23,9 @@ export class AddEnfantComponent implements OnInit {
   public successMessage: string | null = null;
 
   public listePays = [
-    { id: 'SEN', nom: 'Sénégal', flag: '🇸🇳' },
-    { id: 'BFA', nom: 'Burkina Faso', flag: '🇧🇫' },
-    { id: 'MLI', nom: 'Mali', flag: '🇲🇱' }
+    { id: 'SN', nom: 'Sénégal', flag: '🇸🇳' },
+    { id: 'BF', nom: 'Burkina Faso', flag: '🇧🇫' },
+    { id: 'ML', nom: 'Mali', flag: '🇲🇱' }
   ];
 
   // ⚡ FIX: Remplacement de http://localhost:8000 par environment.apiUrl

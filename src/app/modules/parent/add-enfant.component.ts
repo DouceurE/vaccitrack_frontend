@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, AbstractControl, ReactiveFormsModul
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../environments/environment'; // 👈 Import de environment
 
 @Component({
   selector: 'app-add-enfant',
@@ -27,7 +28,8 @@ export class AddEnfantComponent implements OnInit {
     { id: 'MLI', nom: 'Mali', flag: '🇲🇱' }
   ];
 
-  private readonly API_URL = 'http://localhost:8000/api/v1/patients/enfants/';
+  // ⚡ FIX: Remplacement de http://localhost:8000 par environment.apiUrl
+  private readonly API_URL = `${environment.apiUrl}/patients/enfants/`;
 
   constructor(
     private fb: FormBuilder,
@@ -45,7 +47,7 @@ export class AddEnfantComponent implements OnInit {
       nom: ['', [Validators.required, Validators.minLength(2)]],
       date_naissance: ['', [Validators.required, this.validerDatePasDansLeFutur]],
       genre: ['', [Validators.required]],
-      pays_residence_code: ['', [Validators.required]] // Harmonisé avec le Sérialiseur Django
+      pays_residence_code: ['', [Validators.required]]
     });
   }
 
@@ -71,7 +73,6 @@ export class AddEnfantComponent implements OnInit {
     this.errorMessage = null;
     this.successMessage = null;
 
-    // L'intercepteur JWT va automatiquement injecter le jeton d'accès ici
     this.http.post(this.API_URL, this.enfantForm.value).subscribe({
       next: () => {
         this.isLoading = false;

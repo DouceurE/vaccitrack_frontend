@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from '../../../../environments/environment'; // 👈 Import de environment
 
 @Component({
   selector: 'app-edit-enfant',
@@ -27,11 +28,12 @@ export class EditEnfantComponent implements OnInit {
     pays_residence: ''
   };
 
-  // Liste des pays qui sera surchargée dynamiquement par l'API PostgreSQL
+  // Liste des pays
   public listePays: any[] = [];
 
-  private readonly API_BASE_URL = 'http://localhost:8000/api/v1/patients/enfants/';
-  private readonly API_PAYS_URL = 'http://localhost:8000/api/v1/locations/pays/';
+  // ⚡ FIX: Remplacement de localhost par environment.apiUrl
+  private readonly API_BASE_URL = `${environment.apiUrl}/patients/enfants/`;
+  private readonly API_PAYS_URL = `${environment.apiUrl}/locations/pays/`;
 
   constructor(
     private http: HttpClient,
@@ -40,16 +42,15 @@ export class EditEnfantComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Extrait l'ID de l'enfant présent dans l'adresse URL
     this.enfantId = this.route.snapshot.paramMap.get('id')!;
-    this.chargerListePays(); // Étape 1 : Charger la cartographie (Sénégal, Burkina, Mali)
+    this.chargerListePays();
     if (this.enfantId) {
-      this.chargerDonneesEnfant(); // Étape 2 : Charger les informations de l'enfant
+      this.chargerDonneesEnfant();
     }
   }
 
   /**
-   * Récupère la liste officielle des pays d'Afrique de l'Ouest depuis PostgreSQL
+   * Récupère la liste officielle des pays depuis PostgreSQL
    */
   private chargerListePays(): void {
     const token = localStorage.getItem('access_token');
@@ -74,7 +75,7 @@ export class EditEnfantComponent implements OnInit {
         this.enfant.nom = data.nom;
         this.enfant.date_naissance = data.date_naissance;
         this.enfant.genre = data.genre;
-        this.enfant.pays_residence = data.pays_residence; // ID du pays
+        this.enfant.pays_residence = data.pays_residence;
         this.isLoading = false;
       },
       error: (error: HttpErrorResponse) => {
@@ -100,7 +101,6 @@ export class EditEnfantComponent implements OnInit {
       next: () => {
         this.successMessage = "Le profil a été mis à jour avec succès.";
         this.isSaving = false;
-        // Retour automatique vers le tableau de bord parent d'où l'on vient après 1.5 seconde
         setTimeout(() => this.router.navigate(['/parent/dashboard']), 1500);
       },
       error: (error: HttpErrorResponse) => {
@@ -111,7 +111,7 @@ export class EditEnfantComponent implements OnInit {
   }
 
   /**
-   * Retourne manuellement au tableau de bord parent lors d'un clic sur Annuler
+   * Retourne manuellement au tableau de bord parent
    */
   public annuler(): void {
     this.router.navigate(['/parent/dashboard']);

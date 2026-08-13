@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment'; // 👈 Import de environment
 
 export interface MessageForum {
   id: string;
@@ -25,7 +26,8 @@ export class ParentForumComponent implements OnInit {
   public isSending: boolean = false;
   public errorMessage: string | null = null;
 
-  private readonly API_FORUM_URL = 'http://localhost:8000/api/v1/core/forum/messages/';
+  // ⚡ FIX: Remplacement de localhost par environment.apiUrl
+  private readonly API_FORUM_URL = `${environment.apiUrl}/core/forum/messages/`;
 
   constructor(
     private http: HttpClient,
@@ -93,9 +95,9 @@ export class ParentForumComponent implements OnInit {
       headers: this.obtenirHeadersSecurises()
     }).subscribe({
       next: () => {
-        this.nouveauMessage = ''; // Vise le champ d'écriture
+        this.nouveauMessage = '';
         this.isSending = false;
-        this.chargerMessagesCommunautaires(); // Rafraîchit automatiquement la liste
+        this.chargerMessagesCommunautaires();
       },
       error: (error: HttpErrorResponse) => {
         this.isSending = false;

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment'; // 👈 Import de environment
 
 export interface MessageForum {
   id: string;
@@ -291,7 +292,7 @@ export class MedecinForumComponent implements OnInit {
   public isSending: boolean = false;
   public errorMessage: string | null = null;
 
-  private readonly API_FORUM_URL = 'http://localhost:8000/api/v1/core/forum/messages/';
+ private readonly API_FORUM_URL = `${environment.apiUrl}/core/forum/messages/`;
 
   constructor(
     private http: HttpClient,

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-medecin-dashboard',
@@ -314,7 +315,8 @@ export class MedecinDashboardComponent implements OnInit {
   public errorMessage: string = '';
   public successMessage: string = '';
 
-  private readonly API_BASE_URL = 'http://localhost:8000/api/v1/vaccinations/doctor/';
+  private readonly API_BASE_URL = `${environment.apiUrl}/vaccinations/doctor/`;
+  
   // 🟢 NOUVELLES VARIABLES AJOUTÉES POUR LES MODULES PRO
   public listeStocks: any[] = [];
   public listeTemperatures: any[] = [];

@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { VocalService } from '../../core/services/vocal.service';
+import { environment } from '../../../environments/environment'; // 👈 Import de environment
 
 export interface Enfant {
   id: string;
@@ -41,17 +42,17 @@ export class ParentDashboardComponent implements OnInit, OnDestroy {
   public errorMessage: string | null = null;
   public listeAlertesUrgentes: any[] = [];
 
-  private readonly API_ENFANTS_URL = 'http://localhost:8000/api/v1/patients/enfants/';
+  // ⚡ FIX 1: Remplacement de localhost par environment.apiUrl
+  private readonly API_ENFANTS_URL = `${environment.apiUrl}/patients/enfants/`;
 
   constructor(
     private http: HttpClient,
     private router: Router,
-    private vocalService: VocalService // 🟢 L'INJECTION A ÉTÉ CORRIGÉE ET PLACÉE ICI
+    private vocalService: VocalService
   ) {}
 
   ngOnInit(): void {
     this.chargerDonneesDashboard();
-    
   }
 
   ngOnDestroy(): void {
@@ -93,7 +94,8 @@ export class ParentDashboardComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.errorMessage = null;
 
-    const API_CALENDRIER_URL = `http://localhost:8000/api/v1/vaccinations/calendrier/${enfant.id}/`;
+    // ⚡ FIX 2: Remplacement de localhost par environment.apiUrl
+    const API_CALENDRIER_URL = `${environment.apiUrl}/vaccinations/calendrier/${enfant.id}/`;
 
     this.http.get<VaccinLigne[]>(API_CALENDRIER_URL)
       .pipe(takeUntil(this.destroy$))
@@ -122,7 +124,8 @@ export class ParentDashboardComponent implements OnInit, OnDestroy {
    */
   public supprimerEnfant(id: string): void {
     if (confirm("Voulez-vous vraiment supprimer définitivement le profil de cet enfant ainsi que tout son carnet vaccinal ?")) {
-      this.http.delete(`http://localhost:8000/api/v1/patients/enfants/${id}/`)
+      // ⚡ FIX 3: Remplacement de localhost par environment.apiUrl
+      this.http.delete(`${environment.apiUrl}/patients/enfants/${id}/`)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: () => {
@@ -172,7 +175,8 @@ export class ParentDashboardComponent implements OnInit, OnDestroy {
   public telechargerPDF(): void {
     if (!this.enfantSelectionne) return;
 
-    const API_PDF_URL = `http://localhost:8000/api/v1/vaccinations/carnet-pdf/${this.enfantSelectionne.id}/`;
+    // ⚡ FIX 4: Remplacement de localhost par environment.apiUrl
+    const API_PDF_URL = `${environment.apiUrl}/vaccinations/carnet-pdf/${this.enfantSelectionne.id}/`;
     const token = localStorage.getItem('access_token');
 
     fetch(API_PDF_URL, {
@@ -201,11 +205,8 @@ export class ParentDashboardComponent implements OnInit, OnDestroy {
   public declencherSyntheseVocale(): void {
     if (!this.enfantSelectionne) return;
 
-    // Récupération de la langue préférée enregistrée dans PostgreSQL (stockée au login)
-    // Si non spécifiée, l'application basculera sur le Français ('FR') automatiquement
     const langueParent = localStorage.getItem('langue_preferee') || 'FR';
 
-    // Déclenchement du moteur d'inclusion audio VacciTrack
     this.vocalService.lireCalendrierVocal(
       this.enfantSelectionne.prenom,
       this.carnetVaccination,

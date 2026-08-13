@@ -39,6 +39,7 @@ export class ParentDashboardComponent implements OnInit, OnDestroy {
   public carnetVaccination: VaccinLigne[] = [];
   public isLoading: boolean = true;
   public errorMessage: string | null = null;
+  public listeAlertesUrgentes: any[] = [];
 
   private readonly API_ENFANTS_URL = 'http://localhost:8000/api/v1/patients/enfants/';
 
@@ -50,6 +51,7 @@ export class ParentDashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.chargerDonneesDashboard();
+    
   }
 
   ngOnDestroy(): void {

@@ -220,44 +220,66 @@ import { ApiService } from '../../core/services/api.service';
       </main>
     </div>
   `,
-    styles: [`
+   
+styles: [`
+    /* Structure Globale */
     .medecin-global-container { display: flex; min-height: 100vh; background-color: #f8fafc; font-family: 'Segoe UI', system-ui, sans-serif; color: #334155; }
-    .medecin-sidebar { width: 280px; background-color: #1e293b; color: #ffffff; display: flex; flex-direction: column; justify-content: space-between; padding: 2rem 1.5rem; box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05); }
-    .sidebar-brand-area h2 { font-size: 1.25rem; margin: 0 0 2rem 0; color: #38bdf8; font-weight: 700; letter-spacing: -0.5px; }
+    
+    /* Sidebar Harmonisée en Bleu Clair */
+    .medecin-sidebar { width: 280px; background-color: #006fc2; color: #ffffff; display: flex; flex-direction: column; justify-content: space-between; padding: 2rem 1.5rem; box-shadow: 4px 0 15px rgba(0, 111, 194, 0.1); }
+    .sidebar-brand-area h2 { font-size: 1.25rem; margin: 0 0 2rem 0; color: #ffffff; font-weight: 700; letter-spacing: -0.5px; opacity: 0.95; }
     .sidebar-medical-meta { flex-grow: 1; display: flex; flex-direction: column; gap: 1.5rem; }
-    .doctor-badge-info { display: flex; align-items: center; gap: 0.75rem; background-color: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); }
+    
+    /* Badges et Cartes internes de la Sidebar (Harmonie Translucide) */
+    .doctor-badge-info { display: flex; align-items: center; gap: 0.75rem; background-color: rgba(255, 255, 255, 0.12); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.18); }
     .doctor-badge-info .doc-icon { font-size: 1.5rem; }
     .doctor-badge-info .doc-text { display: flex; flex-direction: column; }
-    .doctor-badge-info .doc-text strong { font-size: 0.95rem; color: #f8fafc; }
-    .doctor-badge-info .doc-text small { font-size: 0.8rem; color: #94a3b8; margin-top: 2px; }
-    .stats-card-widget { background: linear-gradient(135deg, #0f172a, #1e293b); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #10b981; }
-    .stats-label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.5rem; }
-    .stats-value { font-size: 1.75rem; font-weight: 700; color: #ffffff; }
-    .btn-forum-nav { width: 100%; margin-top: 1rem; background: #0084df; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-    .btn-forum-nav:hover { background: #0073c4; }
-    .btn-logout { width: 100%; background-color: transparent; border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; padding: 0.75rem; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s ease; }
-    .btn-logout:hover { background-color: rgba(239, 68, 68, 0.1); border-color: #ef4444; color: #ffffff; }
+    .doctor-badge-info .doc-text strong { font-size: 0.95rem; color: #ffffff; }
+    .doctor-badge-info .doc-text small { font-size: 0.8rem; color: rgba(255, 255, 255, 0.75); margin-top: 2px; }
+    
+    .stats-card-widget { background: rgba(255, 255, 255, 0.15); padding: 1.25rem; border-radius: 8px; border-left: 4px solid #00f2fe; border-top: 1px solid rgba(255, 255, 255, 0.1); border-right: 1px solid rgba(255, 255, 255, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+    .stats-label { display: block; font-size: 0.8rem; color: rgba(255, 255, 255, 0.8); margin-bottom: 0.5rem; font-weight: 500; }
+    .stats-value { font-size: 2rem; font-weight: 700; color: #ffffff; }
+    
+    /* Boutons de Navigation de la Sidebar */
+    .btn-forum-nav { width: 100%; margin-top: 1rem; background: #ffffff; color: #006fc2; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); }
+    .btn-forum-nav:hover { background: #f0fdf4; transform: translateY(-1px); }
+    
+    /* Bouton Déconnexion Propre et Lisible */
+    .btn-logout { width: 100%; background-color: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.3); color: #ffffff; padding: 0.75rem; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+    .btn-logout:hover { background-color: #ef4444; border-color: #ef4444; color: #ffffff; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2); }
+    
+    /* Zone Principale de Contenu */
     .medecin-main-content { flex: 1; padding: 2.5rem; overflow-y: auto; }
     .search-section-header { margin-bottom: 2rem; }
     .search-section-header h1 { font-size: 1.75rem; color: #1e293b; margin: 0 0 0.5rem 0; font-weight: 700; }
     .search-section-header p { font-size: 0.95rem; color: #64748b; margin: 0; }
+    
+    /* Barre de Recherche et Bouton "Charger le Dossier" Modernisé */
     .search-action-bar { display: flex; gap: 1rem; margin-bottom: 2rem; background-color: #ffffff; padding: 0.75rem; border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
     .input-search-wrapper { flex: 1; position: relative; }
     .search-prefix-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); }
     .form-control-search { padding-left: 2.5rem; width: 100%; height: 48px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 1rem; color: #1e293b; font-weight: 600; background-color: #f8fafc; box-sizing: border-box; transition: all 0.2s ease; }
-    .form-control-search:focus { outline: none; border-color: #0084df; background-color: #ffffff; box-shadow: 0 0 0 3px rgba(0, 132, 223, 0.1); }
-    .btn-action-search { height: 48px; padding: 0 1.75rem; background-color: #0084df; color: #ffffff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background-color 0.2s ease; }
-    .btn-action-search:hover:not(:disabled) { background-color: #0073c4; }
-    .btn-action-search:disabled { background-color: #94a3b8; cursor: not-allowed; }
+    .form-control-search:focus { outline: none; border-color: #006fc2; background-color: #ffffff; box-shadow: 0 0 0 3px rgba(0, 111, 194, 0.15); }
+    
+    .btn-action-search { height: 48px; padding: 0 1.75rem; background-color: #006fc2; color: #ffffff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0, 111, 194, 0.15); }
+    .btn-action-search:hover:not(:disabled) { background-color: #005696; transform: translateY(-1px); }
+    .btn-action-search:disabled { background-color: #cbd5e1; color: #94a3b8; cursor: not-allowed; box-shadow: none; }
+    
+    /* Bannières d'Alerte */
     .alert-banner { padding: 1rem; border-radius: 6px; margin-bottom: 2rem; font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; }
     .alert-danger { background-color: #fef2f2; color: #991b1b; border: 1px solid #fee2e2; }
     .alert-success { background-color: #f0fdf4; color: #166534; border: 1px solid #dcfce7; }
+    
+    /* Fiche Patient et Timeline */
     .patient-file-layout { display: flex; flex-direction: column; gap: 2rem; animation: fadeIn 0.3s ease-in-out; }
     .patient-avatar-box { width: 64px; height: 64px; background-color: #e0f2fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; }
     .patient-meta-details h2 { font-size: 1.35rem; color: #1e293b; margin: 0 0 0.5rem 0; }
     .patient-badges-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .badge-tag { background-color: #f8fafc; color: #334155; padding: 4px 10px; border-radius: 4px; font-size: 0.85rem; font-weight: 500; border: 1px solid #e2e8f0; }
     .badge-tag.token-tag { background-color: #fef3c7; color: #92400e; border-color: #fde68a; font-family: monospace; }
+    
+    /* Tableaux Cliniques */
     .medical-timeline-card { background-color: #ffffff; padding: 1.5rem; border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
     .medical-timeline-card h3 { font-size: 1.1rem; color: #1e293b; margin: 0 0 1.25rem 0; font-weight: 600; }
     .clinical-table-wrapper { overflow-x: auto; }
@@ -267,14 +289,20 @@ import { ApiService } from '../../core/services/api.service';
     .clinical-table tbody tr:hover { background-color: rgba(248, 250, 252, 0.7); }
     .text-dimmed { color: #64748b; font-size: 0.9rem; }
     .date-check { color: #10b981; font-weight: 600; }
+    
+    /* Status et Actions Éléments */
     .badge-status.status-done { background-color: #dcfce7; color: #166534; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; display: inline-block; }
     .btn-clinical-validate { background-color: #f0fdf4; color: #10b981; border: 1px solid rgba(34, 197, 94, 0.3); padding: 6px 14px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
     .btn-clinical-validate:hover { background-color: #10b981; color: #ffffff; border-color: #10b981; }
+    
+    /* État d'attente */
     .waiting-state-card { background-color: #ffffff; padding: 4rem 2rem; border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); text-align: center; border: 2px dashed #e2e8f0; margin-top: 2rem; }
     .waiting-state-card h3 { color: #1e293b; font-size: 1.2rem; margin: 0 0 0.5rem 0; }
     .waiting-state-card p { color: #64748b; font-size: 0.95rem; max-width: 400px; margin: 0 auto; }
+    
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-  `]
+`]
+
 })
 export class MedecinDashboardComponent implements OnInit {
   public injectionsDuMois: number = 0;
@@ -286,7 +314,7 @@ export class MedecinDashboardComponent implements OnInit {
   public errorMessage: string = '';
   public successMessage: string = '';
 
-  private readonly API_BASE_URL = 'https://vaccitrack-backend-4.onrender.com/api/v1/vaccinations/doctor/';
+  private readonly API_BASE_URL = 'http://localhost:8000/api/v1/vaccinations/doctor/';
   // 🟢 NOUVELLES VARIABLES AJOUTÉES POUR LES MODULES PRO
   public listeStocks: any[] = [];
   public listeTemperatures: any[] = [];

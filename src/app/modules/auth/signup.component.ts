@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-signup',
@@ -12,7 +13,7 @@ import { CommonModule } from '@angular/common';
   ],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
-  })
+})
 export class SignupComponent implements OnInit {
   public signupForm!: FormGroup;
   public currentStep: number = 1;
@@ -33,7 +34,8 @@ export class SignupComponent implements OnInit {
     { code: 'MO', nom: 'Mooré' }
   ];
 
-  private readonly API_URL = 'https://vaccitrack-backend-4.onrender.com/api/v1/authentications/register/';
+  // ⚡ URL dynamique selon l'environnement (Dev / Production)
+  private readonly API_URL = `${environment.apiUrl}/authentications/register/`;
 
   constructor(
     private fb: FormBuilder,
@@ -136,4 +138,3 @@ export class SignupComponent implements OnInit {
     }
   }
 }
-

@@ -291,7 +291,7 @@ export class MedecinForumComponent implements OnInit {
   public isSending: boolean = false;
   public errorMessage: string | null = null;
 
-  private readonly API_FORUM_URL = 'https://vaccitrack-backend-4.onrender.com/api/v1/core/forum/messages/';
+  private readonly API_FORUM_URL = 'http://localhost:8000/api/v1/core/forum/messages/';
 
   constructor(
     private http: HttpClient,

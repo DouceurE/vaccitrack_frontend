@@ -63,17 +63,32 @@
           <!-- COLONNE GAUCHE : PASSEPORT & ALERTES -->
           <div class="left-widgets-column">
             
-            <!-- CARTE QR CODE ET TELECHARGEMENT -->
+                        <!-- CARTE QR CODE CORRIGÉE ET TEXTE JETON RÉ-INTÉGRÉ -->
             <div class="medical-widget-card qr-card-layout">
-              <div class="qr-header-flex">
-                <div class="passport-icon-box">📘 Carnet de Santé Numérique</div>
-                <div class="qr-frame">
-                  <img [src]="'https://qrserver.com' + enfantSelectionne.qr_code_token" alt="QR Code Unique">
+              <div class="qr-header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <div class="passport-icon-box" style="font-size: 0.9rem; font-weight: 700; color: #0084df;">📘 Carnet Numérique</div>
+                
+                <!-- 🛠️ CORRECTION DU LIEN DE L'API QR CODE (Ajout du paramètre data= obligatoire) -->
+                <div class="qr-frame" style="border: 1px solid #e2e8f0; padding: 4px; border-radius: 8px; background: white;">
+                  <img [src]="'https://qrserver.com' + enfantSelectionne.qr_code_token" 
+                       alt="Passport Sanitaire QR Code"
+                       style="width: 100px; height: 100px; display: block; margin: 0 auto;">
                 </div>
               </div>
-              <p class="qr-instructions"><strong>QR CODE UNIQUE</strong><br>À partager avec le médecin lors de la consultation.</p>
+              
+              <!-- 🛠️ RÉ-INTÉGRATION DE L'AFFICHAGE DU JETON SALS ET TEXTUEL -->
+              <div class="token-display-wrapper" style="margin-bottom: 1rem; background-color: #fef3c7; border: 1px solid #fde68a; border-radius: 6px; padding: 6px 10px; text-align: center;">
+                <code class="token-display" style="font-family: monospace; font-size: 0.85rem; color: #92400e; font-weight: bold; word-break: break-all;">
+                  Jeton : {{ enfantSelectionne.qr_code_token }}
+                </code>
+              </div>
+
+              <p class="qr-instructions" style="font-size: 0.8rem; color: #64748b; line-height: 1.4; margin-bottom: 1rem;">
+                <strong>Authentification unique</strong><br>À présenter au médecin pour charger l'historique sécurisé.
+              </p>
               <button type="button" class="btn-download-pdf" (click)="telechargerPDF()">TÉLÉCHARGER CARNET (PDF)</button>
             </div>
+
 
             <!-- CARTE RAPPELEUR ALERTE J-1 -->
             <div class="medical-widget-card alert-urgency-card">

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { HttpClient, HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -23,8 +24,7 @@ export class LoginComponent implements OnInit {
   public errorMessage: string | null = null;
 
   // Point d'entrée de l'API Django Simple-JWT (sera créé à l'étape suivante)
-  private readonly API_URL = 'http://localhost:8000/api/v1/authentications/login/';
-
+   private readonly API_URL = `${environment.apiUrl}/authentications/login/`;
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
@@ -49,14 +49,12 @@ export class LoginComponent implements OnInit {
   /**
    * Traite la soumission des identifiants et communique avec Django.
    */
-    public onSubmit(): void {
-    // ⚡ ESPION 1 : On force la console à parler dès le clic
+  public onSubmit(): void {
     console.log("=== Clic détecté sur Se Connecter ===");
     console.log("Valeurs saisies :", this.loginForm.value);
     console.log("Le formulaire est-il valide ? :", this.loginForm.valid);
 
     if (this.loginForm.invalid) {
-      // ⚡ ESPION 2 : On affiche exactement quel champ bloque la validation
       console.warn("❌ Formulaire invalide. Liste des erreurs par champ :");
       Object.keys(this.loginForm.controls).forEach(key => {
         const controlErrors = this.loginForm.get(key)?.errors;
@@ -64,13 +62,15 @@ export class LoginComponent implements OnInit {
           console.warn(`Champ [${key}] en erreur :`, controlErrors);
         }
       });
-      return; // Coupe silencieuse réparée grâce aux logs ci-dessus
+      return;
     }
 
     this.isLoading = true;
+    this.errorMessage = null;
     console.log("🚀 Envoi de la requête réseau vers Django...");
 
-    this.http.post<any>('http://localhost:8000/api/v1/authentications/login/', this.loginForm.value).subscribe({
+    // ⚡ FIX: Utilisation de this.API_URL dynamique au lieu de localhost
+    this.http.post<any>(this.API_URL, this.loginForm.value).subscribe({
       next: (response: any) => {
         this.isLoading = false;
         console.log("✅ Authentification réussie ! Réponse Django :", response);
@@ -84,10 +84,10 @@ export class LoginComponent implements OnInit {
       error: (error: HttpErrorResponse) => {
         this.isLoading = false;
         console.error("❌ Échec réseau de l'authentification :", error);
+        this.gererErreurConnexion(error); // 👈 Gestion du message d'erreur utilisateur
       }
     });
   }
-
    /**
      /**
    * Oriente l'utilisateur vers son espace dédié après authentification réussie.

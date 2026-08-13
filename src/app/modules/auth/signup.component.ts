@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-signup',

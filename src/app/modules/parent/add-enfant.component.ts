@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { environment } from '../../../environments/environment'; // 👈 Import de environment
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-add-enfant',
@@ -23,12 +23,11 @@ export class AddEnfantComponent implements OnInit {
   public successMessage: string | null = null;
 
   public listePays = [
-    { id: 'SN', nom: 'Sénégal', flag: '🇸🇳' },
-    { id: 'BF', nom: 'Burkina Faso', flag: '🇧🇫' },
-    { id: 'ML', nom: 'Mali', flag: '🇲🇱' }
+    { id: 'SEN', nom: 'Sénégal', flag: '🇸🇳' },
+    { id: 'BFA', nom: 'Burkina Faso', flag: '🇧🇫' },
+    { id: 'MLI', nom: 'Mali', flag: '🇲🇱' }
   ];
 
-  // ⚡ FIX: Remplacement de http://localhost:8000 par environment.apiUrl
   private readonly API_URL = `${environment.apiUrl}/patients/enfants/`;
 
   constructor(
@@ -73,7 +72,20 @@ export class AddEnfantComponent implements OnInit {
     this.errorMessage = null;
     this.successMessage = null;
 
-    this.http.post(this.API_URL, this.enfantForm.value).subscribe({
+    // 💡 Formatage du payload pour qu'il corresponde exactement à ce que Django attend
+    const formData = {
+      ...this.enfantForm.value,
+      pays_residence: this.enfantForm.value.pays_residence_code // Aligne la clé sur le serializer Django
+    };
+
+    // 💡 Récupération du token JWT (au cas où vous n'avez pas d'Interceptor HTTP)
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+    });
+
+    this.http.post(this.API_URL, formData, { headers }).subscribe({
       next: () => {
         this.isLoading = false;
         this.successMessage = "L'enfant a été enregistré et son calendrier PEV a été généré.";
@@ -86,6 +98,10 @@ export class AddEnfantComponent implements OnInit {
         this.isLoading = false;
         if (error.status === 401) {
           this.errorMessage = "Erreur d'authentification. Votre session a expiré.";
+        } else if (error.error && typeof error.error === 'object') {
+          // Affiche l'erreur renvoyée directement par Django (ex: champ manquant)
+          const firstKey = Object.keys(error.error)[0];
+          this.errorMessage = `${firstKey}: ${error.error[firstKey]}`;
         } else {
           this.errorMessage = "Impossible d'enregistrer l'enfant. Vérifiez les champs.";
         }
